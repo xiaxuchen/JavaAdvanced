@@ -41,3 +41,6 @@
 `private Integer accountNumber = 100;`更改DeadLockTest的该变量即可
 - 配置任务数量  
 `private Integer taskCount = 5000;`更改DeadLockTest的该变量即可
+## 多重加锁中使用wait方法的探究
+具体可以看test目录下org.originit.multilock.MultiLock的单元测试，具体结论就是调用哪个锁对象的wait就释放哪个锁，而其他的锁不释放同时阻塞。
+这其实很好理解，**wait操作相当于释放锁 + park**
