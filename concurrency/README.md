@@ -1,4 +1,4 @@
-## 交替打印奇偶数
+## 交替打印奇偶数(org.originit.print.Entry)
 项目在org.originit.print.impl中实现了AbstractNumberPrint去使用不同的同步
 方法去交替打印，Entry是项目入口，会自动扫描这个包加载所有的实现类然后调用对应的策略去验证，
 并在控制台打印时间
@@ -72,3 +72,8 @@ public void apply(Integer from, Integer to) {
 ## 多重加锁中使用wait方法的探究
 具体可以看test目录下org.originit.multilock.MultiLock的单元测试，具体结论就是调用哪个锁对象的wait就释放哪个锁，而其他的锁不释放同时阻塞。
 这其实很好理解，**wait操作相当于释放锁 + park**
+## 终止线程(org.originit.thread.ThreadInterruptTest)
+测试使用Thread实例的interrupt方法打断线程执行。
+### 问题
+- 通过try catch捕获InterruptedException会清除线程interrupted标志，因此在捕获异常中需要去调用`Thread.currentThread().interrupt();`
+- 如果线程执行结束进入销毁状态，其isInterrupted会为false，可以通过isAlive来判断线程是否存活。
