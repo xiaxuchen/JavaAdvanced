@@ -109,7 +109,7 @@ public class DeadLockTest {
     @Test
     public void testMultiThreadsV1() throws InterruptedException {
        testCommon((from, to) -> {
-           accountService.transferV1(from, to, new BigDecimal("100"));
+           accountService.transferManagerV1(from, to, new BigDecimal("100"));
        });
     }
 
@@ -117,21 +117,35 @@ public class DeadLockTest {
     @Test
     public void testMultiThreadsV2() throws InterruptedException {
         testCommon((from, to) -> {
-            accountService.transferV2(from, to, new BigDecimal("100"));
+            accountService.transferManagerV2(from, to, new BigDecimal("100"));
         });
     }
 
     @Test
     public void testMultiThreadsV3() throws InterruptedException {
         testCommon((from, to) -> {
-            accountService.transferV3(from, to, new BigDecimal("100"));
+            accountService.transferManagerV3(from, to, new BigDecimal("100"));
+        });
+    }
+
+    @Test
+    public void testMultiThreadsOrderedLock() throws InterruptedException {
+        testCommon((from, to) -> {
+            accountService.transferLockOrdered(from, to, new BigDecimal("100"));
         });
     }
 
     @Test
     public void testMultiThreadsV4() throws InterruptedException {
         testCommon((from, to) -> {
-            accountService.transferV4(from, to, new BigDecimal("100"));
+            accountService.transferManagerV4(from, to, new BigDecimal("100"));
+        });
+    }
+
+    @Test
+    public void testMultiThreadsGlobalLock() throws InterruptedException {
+        testCommon((from, to) -> {
+            accountService.transferGlobalLock(from, to, new BigDecimal("100"));
         });
     }
 }
