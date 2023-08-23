@@ -1,11 +1,14 @@
 package org.originit.print;
 
+import lombok.extern.slf4j.Slf4j;
+
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Slf4j
 public abstract class AbstractNumberPrint implements NumberPrint{
 
-    public static int maxNumber = 1000000;
+    public static int maxNumber = 100000;
 
     AtomicInteger atomicInteger = new AtomicInteger(0);
 
@@ -30,16 +33,19 @@ public abstract class AbstractNumberPrint implements NumberPrint{
         }
     }
 
+    protected boolean isFinish() {
+        return atomicInteger.get() > maxNumber;
+    }
+
     protected boolean print(Object o) {
         final int i = atomicInteger.getAndIncrement();
         if ((int)o != i) {
-            System.out.printf("error, o is %d,i is %d",o,i);
+            log.error("num should be {}, but now is {}", i, o);
             countDownLatch.countDown();
             return false;
         }
         if (i == maxNumber) {
             time = (System.currentTimeMillis() - start);
-//            System.out.printf("used %d ms to Print odd and even numbers in turn successfully", time);
             countDownLatch.countDown();
             return false;
         }
@@ -47,8 +53,8 @@ public abstract class AbstractNumberPrint implements NumberPrint{
         if (i >= maxNumber) {
             return false;
         }
+//        log.info("current i={}",i);
         return true;
-//        System.out.println(o);
     }
 
     public long run() {

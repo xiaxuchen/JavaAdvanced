@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import org.originit.base.ExecutorServiceCapable;
 import org.originit.deadlock.exception.AccountSurplusNotEnoughException;
 import org.originit.deadlock.service.AccountService;
 
@@ -18,7 +19,7 @@ import java.util.stream.IntStream;
 
 @RunWith(Parameterized.class)
 @Slf4j
-public class DeadLockTest {
+public class DeadLockTest implements ExecutorServiceCapable {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -46,18 +47,6 @@ public class DeadLockTest {
     }
 
     private final AccountService accountService = new AccountService();
-
-    private ExecutorService getExecutorService(Integer corePoolSize, Integer maximumPoolSize) {
-        AtomicInteger idGenerator = new AtomicInteger();
-        ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize,
-                1L, TimeUnit.MINUTES, new ArrayBlockingQueue<>(20000), r -> {
-            Thread thread = new Thread(r);
-            thread.setName("threadDeadTest-" + idGenerator.incrementAndGet());
-            return thread;
-        });
-        threadPoolExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
-        return threadPoolExecutor;
-    }
 
     private void testCommon(BiConsumer<Integer,Integer> runnable) throws InterruptedException {
         if (runnable == null) {
@@ -134,6 +123,14 @@ public class DeadLockTest {
             accountService.transferLockOrdered(from, to, new BigDecimal("100"));
         });
     }
+    @Test
+    public void testMultiThreadsOrderedLockWithSemaphore() throws InterruptedException {
+        accountService.setSemaphore(100);
+        testCommon((from, to) -> {
+            accountService.transferLockOrderedWithSemaphore(from, to, new BigDecimal("100"));
+        });
+    }
+
 
     @Test
     public void testMultiThreadsV4() throws InterruptedException {

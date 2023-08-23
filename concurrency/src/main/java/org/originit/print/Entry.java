@@ -23,9 +23,22 @@ public class Entry {
 
         private long time;
 
-        public Info(String name, long time) {
+        public static final int RUN_TIMES = 10;
+
+        public Info(String name, NumberPrint numberPrint) {
             this.name = name;
-            this.time = time;
+            this.time = runPrint(numberPrint);
+        }
+
+        /**
+         * 多次运行求取平均值
+         */
+        public long runPrint(NumberPrint numberPrint) {
+            long time = 0;
+            for (int i = 0; i < RUN_TIMES; i++) {
+                time += numberPrint.run();
+            }
+            return time / 10;
         }
     }
 
@@ -57,7 +70,8 @@ public class Entry {
             }
         }).filter(Objects::nonNull)
                 .map(o -> {
-                    return new Info(o.getClass().getName(), o.run());
+                    log.info("{} is running", o.getClass().getName());
+                    return new Info(o.getClass().getName(), o);
                 }).collect(Collectors.toList()).stream()
                 .sorted(Comparator.comparingLong(o -> o.time)).forEach(info -> {
            log.info("{} used {} ms\r\n", info.name, info.time);

@@ -4,7 +4,6 @@ package org.originit.print.impl;
 import org.originit.print.AbstractNumberPrint;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 
 public class AtomicPrint extends AbstractNumberPrint {
 
@@ -12,7 +11,7 @@ public class AtomicPrint extends AbstractNumberPrint {
 
     @Override
     public void printOdd(Thread odd, Thread even) {
-        while (true) {
+        while (!isFinish()) {
             final int i = atomicInteger.get();
             if (i % 2 != 0) {
                 final boolean res = print(i);
@@ -29,7 +28,7 @@ public class AtomicPrint extends AbstractNumberPrint {
 
     @Override
     public void printEven(Thread odd, Thread even) {
-        while (true) {
+        while (!isFinish()) {
             final int i = atomicInteger.get();
             if (i % 2 == 0) {
                 final boolean res = print(i);

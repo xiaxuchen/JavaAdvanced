@@ -16,7 +16,7 @@ public class ParkPrint extends AbstractAggNumberPrint {
 
     @Override
     protected void printNum(Thread odd, Thread even, Predicate<Integer> predicate, boolean isOdd) {
-        while(true) {
+        while(!isFinish()) {
             synchronized (lock) {
                 if (predicate.test(num)) {
                     final boolean res = print(num);

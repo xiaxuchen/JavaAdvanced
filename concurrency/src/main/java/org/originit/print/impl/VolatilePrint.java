@@ -10,7 +10,7 @@ public class VolatilePrint extends AbstractNumberPrint {
 
     @Override
     public void printOdd(Thread odd, Thread even) {
-        while (true) {
+        while (!isFinish()) {
             if (num % 2 != 0) {
                 final boolean res = print(num);
                 num = add(num);
@@ -24,7 +24,7 @@ public class VolatilePrint extends AbstractNumberPrint {
 
     @Override
     public void printEven(Thread odd, Thread even) {
-        while (true) {
+        while (!isFinish()) {
             if (num % 2 == 0) {
                 final boolean res = print(num);
                 num = add(num);

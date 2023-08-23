@@ -10,6 +10,7 @@ import org.originit.deadlock.util.LockManagerV3;
 import org.originit.deadlock.util.LockManagerV4;
 
 import java.math.BigDecimal;
+import java.util.concurrent.Semaphore;
 
 @Slf4j
 public class AccountService {
@@ -144,6 +145,26 @@ public class AccountService {
         fromAccount.setSurplus(fromAccount.getSurplus().subtract(amount));
         toAccount.setSurplus(toAccount.getSurplus().add(amount));
         log.debug("转账成功，转账金额【{}】，转账后账户信息【from:{},to:{}】", amount, fromAccount, toAccount);
+    }
+
+    Semaphore semaphore;
+
+    public void setSemaphore(int count) {
+        semaphore = new Semaphore(count);
+    }
+
+    /**
+     * 破坏循环等待条件
+     * 按账户id排序加锁，破坏循环等待条件
+     */
+    public void transferLockOrderedWithSemaphore(Integer from, Integer to, BigDecimal amount) {
+        // 不断尝试获取锁
+        semaphore.acquireUninterruptibly();
+        try {
+            transferLockOrdered(from, to, amount);
+        } finally {
+            semaphore.release();
+        }
     }
 
     public Account getAccountById(Integer id) {

@@ -1,7 +1,5 @@
 package org.originit.print;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public abstract class AbstractAggNumberPrint extends AbstractNumberPrint{

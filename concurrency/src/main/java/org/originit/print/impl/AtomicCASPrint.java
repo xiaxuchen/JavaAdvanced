@@ -4,7 +4,6 @@ package org.originit.print.impl;
 import org.originit.print.AbstractNumberPrint;
 
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.LockSupport;
 
 public class AtomicCASPrint extends AbstractNumberPrint {
 
@@ -12,7 +11,7 @@ public class AtomicCASPrint extends AbstractNumberPrint {
 
     @Override
     public void printOdd(Thread odd, Thread even) {
-        while (true) {
+        while (!isFinish()) {
             final int i = atomicInteger.get();
             if (i % 2 != 0) {
                 final boolean res = print(i);
@@ -27,7 +26,7 @@ public class AtomicCASPrint extends AbstractNumberPrint {
 
     @Override
     public void printEven(Thread odd, Thread even) {
-        while (true) {
+        while (!isFinish()) {
             final int i = atomicInteger.get();
             if (i % 2 == 0) {
                 final boolean res = print(i);

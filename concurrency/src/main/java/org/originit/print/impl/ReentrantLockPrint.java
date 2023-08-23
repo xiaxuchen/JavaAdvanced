@@ -19,7 +19,7 @@ public class ReentrantLockPrint extends AbstractNumberPrint {
     public void printOdd(Thread odd, Thread even) {
             reentrantLock.lock();
             try {
-                while(true) {
+                while(!isFinish()) {
                     if (num % 2 != 0) {
                         final boolean res = print(num);
                         num = add(num);
@@ -44,7 +44,7 @@ public class ReentrantLockPrint extends AbstractNumberPrint {
     public void printEven(Thread odd, Thread even) {
         reentrantLock.lock();
         try {
-            while(true) {
+            while(!isFinish()) {
                 if (num % 2 == 0) {
                     final boolean res = print(num);
                     num = add(num);
