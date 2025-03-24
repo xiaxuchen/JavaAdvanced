@@ -11,6 +11,7 @@
   <url>http://maven.apache.org</url>
   <modules>
     <module>concurrency</module>
+      <module>library-related</module>
   </modules>
 
   <properties>
@@ -25,5 +26,11 @@
     </dependency>
   </dependencies>
 
+  <repositories>
+    <repository>
+      <id>aliyunmaven</id>
+      <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+    </repository>
+  </repositories>
 
 </project>
