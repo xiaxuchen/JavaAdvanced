@@ -24,6 +24,11 @@
             <version>4.12</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.antlr</groupId>
+            <artifactId>antlr4</artifactId>
+            <version>4.10.1</version>
+        </dependency>
         <!--jmh 基准测试 -->
         <dependency>
             <groupId>org.openjdk.jmh</groupId>
